@@ -33,19 +33,17 @@ bank-churn/
 │   ├── data/
 │   │   └── data_loader.py              # CSV loading, path constants, YAML loader
 │   ├── preprocessing/
-│   │   ├── pipeline.py                 # 10-step preprocessing pipeline
+│   │   ├── pipeline.py                 # 9-step preprocessing pipeline
 │   │   ├── transformers.py             # Custom sklearn transformers
 │   │   └── preprocessing_utils.py     # Feature engineering + SegmentStats
 │   ├── models/
 │   │   ├── model.py                    # Model class with pseudo-labelling workflow
 │   │   ├── models_builders.py          # Pipeline, calibration, stacking factories
-│   │   └── hpo_tuner.py               # Optuna HPO (maximises ROC-AUC)
-│   ├── blending/
-│   │   └── blender.py                 # Rank-average blending + pseudo-labelling
+│   │   └── hpo_tuner.py               # Optuna HPO (maximises ROC-AUC)               
 │   └── utils/
-│       └── utils.py                   # Visualisation: EDA, calibration, ROC, SHAP
+│       └── utils.py                   
 ├── notebooks/
-│   └── eda_bank_churn.ipynb           # EDA (11 sections)
+│   └── eda_bank_churn.ipynb           # EDA
 ├── main.py                             # Entry point
 └── README.md
 ```
@@ -54,20 +52,19 @@ bank-churn/
 
 ## 🧠 Approach
 
-### 1 — Preprocessing Pipeline (10 steps)
+### 1 — Preprocessing Pipeline (9 steps)
 
 | Step | Transformer | What it does |
-|---|---|---|
-| 1 | `DropIdColumns` | Removes `id`, `CustomerId`, `Surname` |
-| 2 | `FinancialFeatureTransformer` | `BalanceToSalary`, `CreditScorePerAge`, `BalancePerProduct`, `BalanceIsZero` |
-| 3 | `TenureFeatureTransformer` | `IsNew` (≤1y), `IsLoyal` (≥8y), `TenureGroup` (0/1/2) |
-| 4 | `RiskFeatureTransformer` | `AgeRiskScore` (age band), `InactiveRichCustomer`, `EngagementScore` — balance median fitted on train only |
-| 5 | `InteractionFeatureTransformer` | `Age × NumProducts`, `CreditScore × log(Balance)`, `Geography_x_Gender` |
-| 6 | `SegmentStatsTransformer` | Per-Geography and per-NumOfProducts median/std stats — **fit on train only** |
-| 7 | `LogTransformer` | `log1p` on `Balance`, `EstimatedSalary`, `CreditScore` |
-| 8 | `CategoricalEncoder` | Geography → ordinal, Gender → binary, cross-feature → ordinal |
-| 9 | `NumericalImputer` | Median imputation for any residual NaN |
-| 10 | `StandardScaler` | Zero-mean, unit-variance normalisation |
+|------|---|---|
+| 1    | `DropIdColumns` | Removes `id`, `CustomerId`, `Surname` |
+| 2    | `FinancialFeatureTransformer` | `BalanceToSalary`, `CreditScorePerAge`, `BalancePerProduct`, `BalanceIsZero` |
+| 3    | `TenureFeatureTransformer` | `IsNew` (≤1y), `IsLoyal` (≥8y), `TenureGroup` (0/1/2) |
+| 4    | `RiskFeatureTransformer` | `AgeRiskScore` (age band), `InactiveRichCustomer`, `EngagementScore` — balance median fitted on train only |
+| 5    | `InteractionFeatureTransformer` | `Age × NumProducts`, `CreditScore × log(Balance)`, `Geography_x_Gender` |
+| 6    | `SegmentStatsTransformer` | Per-Geography and per-NumOfProducts median/std stats — **fit on train only** |
+| 7    | `CategoricalEncoder` | Geography → ordinal, Gender → binary, cross-feature → ordinal |
+| 8    | `NumericalImputer` | Median imputation for any residual NaN |
+| 9    | `StandardScaler` | Zero-mean, unit-variance normalisation |
 
 ### 2 — Calibrated Stacking Ensemble
 
