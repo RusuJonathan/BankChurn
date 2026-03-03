@@ -1,6 +1,5 @@
 # 🏦 Bank Customer Churn — Binary Classification
 
-[![Python](https://img.shields.io/badge/Python-3.12-green?logo=python)](https://www.python.org/)
 [![Kaggle](https://img.shields.io/badge/Kaggle-PS4E1-blue?logo=kaggle)](https://www.kaggle.com/competitions/playground-series-s4e1)
 [![Metric](https://img.shields.io/badge/Metric-ROC--AUC-orange)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
