@@ -1,0 +1,149 @@
+lgbm:
+  num_leaves:
+    distribution: IntUniformDistribution
+    low: 20
+    high: 300
+  max_depth:
+    distribution: IntUniformDistribution
+    low: 3
+    high: 10
+  learning_rate:
+    distribution: LogUniformDistribution
+    low: 0.005
+    high: 0.2
+  n_estimators:
+    distribution: IntUniformDistribution
+    low: 200
+    high: 2000
+  subsample:
+    distribution: UniformDistribution
+    low: 0.4
+    high: 1.0
+  colsample_bytree:
+    distribution: UniformDistribution
+    low: 0.4
+    high: 1.0
+#  reg_lambda:
+#    distribution: LogUniformDistribution
+#    low: 0.1
+#    high: 10.0
+#  reg_alpha:
+#    distribution: LogUniformDistribution
+#    low: 0.01
+#    high: 5.0
+#  min_child_samples:
+#    distribution: IntUniformDistribution
+#    low: 5
+#    high: 100
+#  scale_pos_weight:
+#    distribution: UniformDistribution
+#    low: 1.0
+#    high: 5.0
+
+xgboost:
+  n_estimators:
+    distribution: IntUniformDistribution
+    low: 200
+    high: 2000
+  max_depth:
+    distribution: IntUniformDistribution
+    low: 3
+    high: 10
+  learning_rate:
+    distribution: LogUniformDistribution
+    low: 0.005
+    high: 0.2
+  subsample:
+    distribution: UniformDistribution
+    low: 0.4
+    high: 1.0
+  colsample_bytree:
+    distribution: UniformDistribution
+    low: 0.4
+    high: 1.0
+#  gamma:
+#    distribution: LogUniformDistribution
+#    low: 0.001
+#    high: 5.0
+#  reg_alpha:
+#    distribution: LogUniformDistribution
+#    low: 0.001
+#    high: 5.0
+#  reg_lambda:
+#    distribution: LogUniformDistribution
+#    low: 0.1
+#    high: 10.0
+#  scale_pos_weight:
+#    distribution: UniformDistribution
+#    low: 1.0
+#    high: 5.0
+
+catboost:
+  iterations:
+    distribution: IntUniformDistribution
+    low: 100
+    high: 2000
+  depth:
+    distribution: IntUniformDistribution
+    low: 4
+    high: 10
+  learning_rate:
+    distribution: LogUniformDistribution
+    low: 0.005
+    high: 0.2
+  l2_leaf_reg:
+    distribution: LogUniformDistribution
+    low: 0.5
+    high: 20.0
+#  random_strength:
+#    distribution: UniformDistribution
+#    low: 0.1
+#    high: 5.0
+#  bagging_temperature:
+#    distribution: UniformDistribution
+#    low: 0.0
+#    high: 1.0
+
+random_forest:
+  n_estimators:
+    distribution: IntUniformDistribution
+    low: 100
+    high: 1500
+  max_depth:
+    distribution: IntUniformDistribution
+    low: 5
+    high: 20
+#  min_samples_split:
+#    distribution: IntUniformDistribution
+#    low: 2
+#    high: 20
+#  min_samples_leaf:
+#    distribution: IntUniformDistribution
+#    low: 1
+#    high: 20
+  max_features:
+    distribution: CategoricalDistribution
+    categories: ['sqrt', 'log2', 0.3, 0.5]
+#  class_weight:
+#    distribution: CategoricalDistribution
+#    categories: ['balanced', 'balanced_subsample']
+
+logistic:
+  C:
+    distribution: LogUniformDistribution
+    low: 0.001
+    high: 100.0
+  l1_ratio:
+    distribution: UniformDistribution
+    low: 0.0
+    high: 1.0
+
+meta_logistic:
+  C:
+    distribution: LogUniformDistribution
+    low: 0.001
+    high: 10.0
+  l1_ratio:
+    distribution: UniformDistribution
+    low: 0.0
+    high: 1.0

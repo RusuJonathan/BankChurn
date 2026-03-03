@@ -1,0 +1,18 @@
+catboost:
+  depth: 4
+  iterations: 645
+  l2_leaf_reg: 14.211629622960016
+  learning_rate: 0.07558944668366964
+lgbm:
+  colsample_bytree: 0.6964795760702011
+  learning_rate: 0.01509393609235219
+  max_depth: 4
+  n_estimators: 1772
+  num_leaves: 119
+  subsample: 0.8761078567088694
+xgboost:
+  colsample_bytree: 0.48591825297939945
+  learning_rate: 0.011403267733036557
+  max_depth: 5
+  n_estimators: 1755
+  subsample: 0.8642789992982712

@@ -1,0 +1,61 @@
+# ── Identifiers ───────────────────────────────────────────────────────────────
+ID_COLS:
+  - id
+  - CustomerId
+  - Surname
+
+# ── Raw feature columns ───────────────────────────────────────────────────────
+NUMERICAL_COLS:
+  - CreditScore
+  - Age
+  - Tenure
+  - Balance
+  - NumOfProducts
+  - EstimatedSalary
+
+CATEGORICAL_COLS:
+  - Geography
+  - Gender
+
+BINARY_COLS:
+  - HasCrCard
+  - IsActiveMember
+
+# ── Ordinal encoding for Geography (by average churn rate, fit on train) ──────
+GEOGRAPHY_ORDER:
+  - France
+  - Spain
+  - Germany
+
+
+ENGINEERED_FINANCIAL:
+  - BalanceToSalary          # Wealth concentration
+  - CreditScorePerAge        # Creditworthiness relative to life stage
+  - BalancePerProduct        # Product utilisation intensity
+  - SalaryPerProduct         # Revenue potential per product
+  - BalanceIsZero            # Binary flag: empty account
+
+ENGINEERED_TENURE:
+  - TenureGroup              # Bucketed tenure (new / mid / loyal)
+  - IsNew                    # Tenure <= 1
+  - IsLoyal                  # Tenure >= 8
+
+ENGINEERED_RISK:
+  - AgeRiskScore             # Age bands associated with higher churn
+  - InactiveRichCustomer     # IsActiveMember=0 & high Balance
+  - LowCreditHighBalance     # CreditScore < 500 & Balance > median
+  - EngagementScore          # Composite: NumOfProducts + IsActiveMember + HasCrCard
+
+ENGINEERED_INTERACTIONS:
+  - Age_x_NumProducts        # Non-linear interaction
+  - CreditScore_x_Balance    # Risk × wealth interaction
+  - Geography_x_Gender_enc   # Cross-feature encoding
+
+ROLLING_STATS:
+  - CreditScore_geo_median       # Median CreditScore per Geography
+  - Balance_geo_median           # Median Balance per Geography
+  - CreditScore_geo_std          # Spread of scores in geography
+  - Age_product_median           # Median age per NumOfProducts group
+  - Salary_geo_product_median    # Salary norm by geo × products segment
+
+LOG_FEATURES:
