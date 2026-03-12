@@ -1,14 +1,10 @@
-# 🏦 Bank Customer Churn — Binary Classification
-
-[![Kaggle](https://img.shields.io/badge/Kaggle-PS4E1-blue?logo=kaggle)](https://www.kaggle.com/competitions/playground-series-s4e1)
-[![Metric](https://img.shields.io/badge/Metric-ROC--AUC-orange)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+# Bank Customer Churn — Binary Classification
 
 > Calibrated stacking ensemble with Optuna HPO, pseudo-labelling, and rank-average blending to predict bank customer churn.
 
 ---
 
-## 📊 Results
+## Results
 
 | Metric | Score      |
 |---|------------|
@@ -18,7 +14,7 @@
 ---
 
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 bank-churn/
@@ -50,7 +46,7 @@ bank-churn/
 
 ---
 
-## 🧠 Approach
+## Approach
 
 ### 1 — Preprocessing Pipeline (9 steps)
 
@@ -98,7 +94,7 @@ Weighting stacking 3× reflects its superior performance vs individual models.
 ---
 
 
-## 📦 Dependencies
+## Dependencies
 
 ```
 scikit-learn  xgboost  lightgbm  catboost
@@ -108,7 +104,7 @@ matplotlib  seaborn  shap
 
 ---
 
-## 📓 EDA Highlights
+## EDA Highlights
 
 Key findings from `notebooks/eda_bank_churn.ipynb`:
 
@@ -118,9 +114,3 @@ Key findings from `notebooks/eda_bank_churn.ipynb`:
 - **Inactive high-balance customers** have the highest individual churn rate → `InactiveRichCustomer` flag
 - **NumOfProducts = 3/4** drives near-100% churn (product mis-selling signal)
 - `Balance` is bimodal (many zero-balance accounts) → `BalanceIsZero` flag + log1p
-
----
-
-## 📄 License
-
-MIT License
