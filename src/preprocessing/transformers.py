@@ -33,7 +33,6 @@ class DropIdColumns(BaseEstimator, TransformerMixin):
 
 
 class FinancialFeatureTransformer(BaseEstimator, TransformerMixin):
-    """BalanceToSalary, CreditScorePerAge, BalancePerProduct, BalanceIsZero…"""
 
     def fit(self, X, y=None):
         return self
@@ -43,8 +42,6 @@ class FinancialFeatureTransformer(BaseEstimator, TransformerMixin):
 
 
 class TenureFeatureTransformer(BaseEstimator, TransformerMixin):
-    """IsNew, IsLoyal, TenureGroup."""
-
     def fit(self, X, y=None):
         return self
 
@@ -53,7 +50,6 @@ class TenureFeatureTransformer(BaseEstimator, TransformerMixin):
 
 
 class RiskFeatureTransformer(BaseEstimator, TransformerMixin):
-    """AgeRiskScore, InactiveRichCustomer, LowCreditHighBalance, EngagementScore."""
 
     def __init__(self):
         self._balance_median = None
@@ -70,7 +66,6 @@ class RiskFeatureTransformer(BaseEstimator, TransformerMixin):
 
 
 class InteractionFeatureTransformer(BaseEstimator, TransformerMixin):
-    """Age_x_NumProducts, CreditScore_x_Balance, Geography_x_Gender."""
 
     def fit(self, X, y=None):
         return self
@@ -80,9 +75,6 @@ class InteractionFeatureTransformer(BaseEstimator, TransformerMixin):
 
 
 class SegmentStatsTransformer(BaseEstimator, TransformerMixin):
-    """
-    Fit-on-train segment-level statistics (geo median/std, age by product, …).
-    """
 
     def __init__(self):
         self._segment_stats = SegmentStats()
@@ -97,11 +89,8 @@ class SegmentStatsTransformer(BaseEstimator, TransformerMixin):
 
 class CategoricalEncoder(BaseEstimator, TransformerMixin):
     """
-    Encodes categorical columns:
-      - Geography    → OrdinalEncoder (order fitted from data, not hardcoded)
-      - Gender       → binary 0/1
-      - Geography_x_Gender → OrdinalEncoder (cross-feature)
-    All other object columns are dropped after encoding.
+    Encodes Geography and Geography_x_Gender with OrdinalEncoder,
+    Gender to binary (Male=1), then drops remaining object columns.
     """
 
     def __init__(self):

@@ -9,15 +9,13 @@ config = load_yaml(preprocessing_path)
 
 def add_financial_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Creates financially-motivated derived features.
+    Adds ratio-based financial features.
 
-    - BalanceToSalary : wealth concentration ratio — high values signal
-                            either savings-focused customers or salary under-reporters
-    - CreditScorePerAge : creditworthiness normalised by life stage;
-                            a 25yr old with 750 is more remarkable than a 60yr old
-    - BalancePerProduct : average balance per product used — high = premium customer
-    - SalaryPerProduct : estimated revenue potential per product
-    - BalanceIsZero: binary flag — zero balance customers often churn silently
+    - BalanceToSalary : balance relative to salary
+    - CreditScorePerAge : credit score normalized by age
+    - BalancePerProduct : average balance per product
+    - SalaryPerProduct : salary per product
+    - BalanceIsZero : 1 if balance is zero, 0 otherwise
     """
     df = df.copy()
 
@@ -25,9 +23,9 @@ def add_financial_features(df: pd.DataFrame) -> pd.DataFrame:
     safe_age = df["Age"].replace(0, np.nan)
     safe_prods = df["NumOfProducts"].replace(0, np.nan)
 
-    df["BalanceToSalary"] = df["Balance"]       / safe_salary
-    df["CreditScorePerAge"] = df["CreditScore"]   / safe_age
-    df["BalancePerProduct"] = df["Balance"]        / safe_prods
+    df["BalanceToSalary"] = df["Balance"] / safe_salary
+    df["CreditScorePerAge"] = df["CreditScore"] / safe_age
+    df["BalancePerProduct"] = df["Balance"]  / safe_prods
     df["SalaryPerProduct"] = df["EstimatedSalary"] / safe_prods
     df["BalanceIsZero"] = (df["Balance"] == 0).astype(int)
 
@@ -39,11 +37,8 @@ def add_financial_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def add_tenure_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Discretises Tenure into behavioural groups.
-    Customer lifecycle stages matter for churn modelling:
-      - New (0-2y)   : still evaluating, high volatility
-      - Mid (3-7y)   : established relationship
-      - Loyal (8-10y): either very satisfied or inertia-locked
+    Bins Tenure into 3 groups: new (0-2y), mid (3-7y), loyal (8-10y).
+    Also adds binary flags IsNew and IsLoyal.
     """
     df = df.copy()
 
@@ -59,13 +54,12 @@ def add_tenure_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def add_risk_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Creates composite risk and engagement indicators.
+    Adds risk and engagement features.
 
-    - AgeRiskScore         : age bands where churn is empirically higher
-                             (35-55 is the peak churn window in banking)
-    - InactiveRichCustomer : dormant high-balance customer — highest churn risk
-    - LowCreditHighBalance : potential credit stress
-    - EngagementScore      : composite loyalty proxy
+    - AgeRiskScore : 2 if age 35-55, 1 if >55, 0 otherwise
+    - InactiveRichCustomer : inactive member with above-median balance
+    - LowCreditHighBalance : credit score < 500 with above-median balance
+    - EngagementScore : sum of NumOfProducts, IsActiveMember, HasCrCard
     """
     df = df.copy()
 
@@ -92,7 +86,8 @@ def add_risk_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def add_interaction_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    adds interaction features
+    Adds pairwise interaction features between Age, CreditScore, Balance,
+    Geography and Gender.
     """
 
     df = df.copy()
@@ -106,7 +101,7 @@ def add_interaction_features(df: pd.DataFrame) -> pd.DataFrame:
 
 def log_transform_features(df: pd.DataFrame,
                              features: List[str]) -> pd.DataFrame:
-    """applies log1p to right-skewed columns"""
+    """Applies log1p to the specified columns."""
     df = df.copy()
     for col in features:
         if col in df.columns:
@@ -115,12 +110,8 @@ def log_transform_features(df: pd.DataFrame,
 
 class SegmentStats:
     """
-    Computes segment-level statistics that simulate lag / rolling features
-    for tabular data where no explicit time index per customer exists.
-
-    For each grouping key, we compute:
-      - median and std of the target feature within the segment
-    These are fitted exclusively on training data to prevent leakage.
+    Computes group-level statistics (median, std) per Geography and NumOfProducts segment.
+    Fitted on train only to avoid leakage.
     """
 
     def __init__(self):
